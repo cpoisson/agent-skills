@@ -182,6 +182,6 @@ Alert contacts: who gets notified on downtime? Document this.
 | Error rate alerting | ✅ / ❌ | |
 | Errors include enough context to reproduce | ✅ / ❌ | |
 
-Score 0–4: Critical gaps — fix before your next production incident.  
-Score 5–6: Functional baseline — grow toward alerting and post-deploy automation.  
+Score 0–4: Critical gaps — fix before your next production incident.
+Score 5–6: Functional baseline — grow toward alerting and post-deploy automation.
 Score 7–8: Mature — focus on reducing noise and improving signal quality.

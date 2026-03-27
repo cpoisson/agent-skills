@@ -1,7 +1,7 @@
 ---
 description: |
   QA strategy and quality confidence expert for software teams in the agentic era.
-  
+
   Use this agent when you want to build, audit, or improve a QA strategy.
 
   Trigger phrases include:

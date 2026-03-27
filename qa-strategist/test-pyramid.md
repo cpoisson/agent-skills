@@ -15,8 +15,8 @@ Design, assess, and incrementally bootstrap a healthy test pyramid. The pyramid 
    /─────────────\ → Pure logic, calculations, transformations
 ```
 
-**Inverted pyramid (anti-pattern):** Too many E2E tests, too few unit tests. Slow, flaky, expensive to maintain.  
-**Ice cream cone (anti-pattern):** Mostly manual testing, some E2E, no unit or integration. Bottleneck before every release.  
+**Inverted pyramid (anti-pattern):** Too many E2E tests, too few unit tests. Slow, flaky, expensive to maintain.
+**Ice cream cone (anti-pattern):** Mostly manual testing, some E2E, no unit or integration. Bottleneck before every release.
 **Trophy (alternative model):** Emphasizes integration tests as the sweet spot. Valid for API-heavy apps. Overlaps with the pyramid at the integration layer.
 
 ## Layer Guidance

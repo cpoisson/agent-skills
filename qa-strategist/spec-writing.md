@@ -113,10 +113,10 @@ Acceptance criteria should be:
 
 Good AC:
 ```
-✅ When the user submits the login form with a valid email and password, 
+✅ When the user submits the login form with a valid email and password,
    the app redirects to /app and a session token is stored in localStorage.
 
-✅ When the user submits the login form with an incorrect password, 
+✅ When the user submits the login form with an incorrect password,
    the API returns 401 and the UI displays "Invalid credentials".
 ```
 
@@ -137,7 +137,7 @@ test('redirects to /app after successful login', async ({ page }) => {
   ...
 });
 
-// AC: Login — invalid password returns 401 and shows error message  
+// AC: Login — invalid password returns 401 and shows error message
 test('shows error message on wrong password', async ({ page }) => {
   ...
 });
