@@ -38,7 +38,7 @@ Design, assess, and incrementally bootstrap a healthy test pyramid. The pyramid 
 
 **Target:** Every pure function with non-trivial logic. Aim for 100% coverage of the logic layer — not the whole codebase.
 
-**Tools:** Jest, Vitest, pytest, Go test, etc.
+**Tools (e.g.):** Jest, Vitest, pytest, Go test, etc.
 
 ### Integration Tests
 
@@ -56,7 +56,7 @@ Design, assess, and incrementally bootstrap a healthy test pyramid. The pyramid 
 
 **Target:** Every API endpoint with at least one happy-path test. High-value error paths (auth failure, validation errors, not-found).
 
-**Tools:** Supertest, Hono test client, pytest + TestClient, httpx, etc.
+**Tools (e.g.):** Supertest, Hono test client, pytest + TestClient, httpx, etc.
 
 ### End-to-End Tests
 
@@ -75,7 +75,7 @@ Design, assess, and incrementally bootstrap a healthy test pyramid. The pyramid 
 
 **Target:** Full coverage of the smoke suite (must pass on every deploy). Regression suite grows with each confirmed production bug.
 
-**Tools:** Playwright (recommended), Cypress, etc.
+**Tools (e.g.):** Playwright, Cypress, etc.
 
 ### Manual / Exploratory
 

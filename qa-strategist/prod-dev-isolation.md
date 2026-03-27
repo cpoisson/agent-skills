@@ -19,10 +19,10 @@ Write code
     │
     ▼
 [ Gate 1: Local tests pass ]
-    │  bun test / pytest / go test
+    │  e.g. bun test / pytest / go test
     ▼
 [ Gate 2: Lint + type check pass ]
-    │  tsc, eslint, ruff
+    │  e.g. tsc, eslint, ruff
     ▼
 Open PR
     │
@@ -40,7 +40,7 @@ Merge to staging branch
     │  auto-deploy on merge to staging branch
     ▼
 [ Gate 6: E2E smoke suite passes on staging ]
-    │  fast Playwright smoke tests — staging must always be in a working state
+    │  e.g. fast Playwright smoke tests — staging must always be in a working state
     │  if the full suite is too slow, run only the critical-path subset here
     ▼
 [ Gate 7: Manual spot check (optional) ]

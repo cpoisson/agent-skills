@@ -72,7 +72,7 @@ For each high-score risk (score ≥ 4), assign a concrete action:
 | Core user flow regression | E2E test for primary happy path | Add to smoke suite (run on every deploy) |
 | Silent API failure | Integration test with response body assertions | Schema validation on API responses |
 | Security vulnerability | OWASP audit (access control, input validation, injection) | Rate limiting on auth endpoints |
-| UX breakage | Visual regression test or manual smoke checklist | Playwright E2E on critical UI interactions |
+| UX breakage | Visual regression test or manual smoke checklist | e.g. Playwright E2E on critical UI interactions |
 | Performance degradation | Add response time assertion to health check | Load test for primary endpoint |
 | Environment drift | Environment parity checklist (see test-environments.md) | Automated parity check in CI |
 | Migration failure | Dry-run migration on staging first | Pre-migration backup; rollback SQL documented |
