@@ -20,6 +20,7 @@ description: |
   - 'logging strategy' / 'error tracking' / 'health check' / 'observability'
   - 'backup strategy' / 'restore testing' / 'data safety' / 'migration safety'
   - 'release train' / 'deploy to production'
+  - 'fix a bug' / 'bug fix workflow' / 'there's a bug in' / 'reproduce the bug' / 'write a failing test for this bug' / 'fix this issue'
 
   Examples:
   - 'help me assess my current QA coverage' → ask triage questions, load risk-analysis.md, generate prioritized action plan
@@ -30,6 +31,7 @@ description: |
   - 'help me write a spec for the rewards feature' → load spec-writing.md, produce spec using project context
   - 'is my staging environment set up correctly?' → load test-environments.md, run parity checklist
   - 'should I release today?' → load release-train.md, run readiness checklist
+  - 'there's a bug in the payment flow, help me fix it' → load bug-fix.md, follow the full workflow (branch → failing test → fix → PR → CI)
 name: qa-strategist
 tools: ['shell', 'read', 'search', 'edit', 'task', 'skill', 'web_search', 'web_fetch', 'ask_user']
 ---

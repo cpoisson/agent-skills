@@ -29,3 +29,4 @@ Load the sub-skill that matches the user's intent. Load one at a time unless the
 | Plan releases, changelogs, release readiness | [release-train.md](release-train.md) | "release", "changelog", "release checklist", "versioning", "deploy to prod", "release cadence" |
 | Logging, error tracking, health checks | [observability.md](observability.md) | "logging", "error tracking", "health check", "alerting", "monitoring", "post-deploy verification" |
 | Backup strategy, restore testing, migration safety | [data-safety.md](data-safety.md) | "backup", "restore", "data safety", "migration risk", "schema change", "data integrity" |
+| Fix a confirmed bug end-to-end (branch → failing test → fix → PR → CI) | [bug-fix.md](bug-fix.md) | "fix a bug", "bug fix workflow", "there's a bug in", "reproduce the bug", "write a failing test", "fix this issue" |
