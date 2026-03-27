@@ -107,9 +107,9 @@ Project-level AGENTS.md should document the minimum verification steps expected 
 ## Validation
 
 Before marking any task complete:
-1. Run `bun test` in the affected app directory — all tests must pass
-2. Run `bun run lint` — no new errors
-3. Run `bun run build` (frontend) or `tsc --noEmit` (API) — no type errors
+1. Run the project test command (e.g. `bun test` / `npm test` / `pytest`) — all tests must pass
+2. Run the project lint command (e.g. `bun run lint` / `eslint .` / `ruff check .`) — no new errors
+3. Run the project type check or build command — no type errors
 4. If you added new behavior: add at least one test for it
 5. If you fixed a bug: add a regression test that would have caught it
 6. Confirm `git diff` does not include unrelated changes
@@ -122,8 +122,8 @@ Add this to your PR template (`.github/pull_request_template.md`):
 ```markdown
 ## Definition of Done
 
-- [ ] All existing tests pass (`bun test`)
-- [ ] Lint passes (`bun run lint`)
+- [ ] All existing tests pass
+- [ ] Lint passes
 - [ ] Type check passes
 - [ ] New behavior has test coverage
 - [ ] No unrelated file changes

@@ -135,7 +135,7 @@ Adapt output to the task:
 - Do not overcomplicate. A 5-test smoke suite that CI runs on every PR is more valuable than a 200-test suite nobody maintains
 - Flag when a recommendation would introduce significant process overhead — make it lighter
 - When producing specs or test cases, be concrete: use actual route names, field names, and behaviors from the project rather than generic placeholders
-- After executing a change, run tests and verify: `bun test`, `bun run type-check`, or the project's equivalent
+- After executing a change, run the project's test and type-check commands to verify nothing is broken
 
 ## Edge Cases
 
