@@ -1,0 +1,14 @@
+# Installed skills (local to each workspace)
+.agents/
+skills-lock.json
+
+# Tool/editor internals
+.vibe/
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Node (skill tooling)
+node_modules/
