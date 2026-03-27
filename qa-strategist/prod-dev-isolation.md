@@ -37,13 +37,14 @@ Merge to staging branch
     │
     ▼
 [ Gate 5: Staging deploy succeeds ]
-    │  auto-deploy on merge to develop/staging branch
+    │  auto-deploy on merge to staging branch
     ▼
-[ Gate 6: Manual smoke check on staging ]
-    │  verify the changed flow works in staging
+[ Gate 6: E2E smoke suite passes on staging ]
+    │  fast Playwright smoke tests — staging must always be in a working state
+    │  if the full suite is too slow, run only the critical-path subset here
     ▼
-[ Gate 7: E2E smoke suite passes ]
-    │  Playwright smoke tests against staging
+[ Gate 7: Manual spot check (optional) ]
+    │  verify specific changed flows if needed
     ▼
 Merge to production branch
     │
@@ -52,7 +53,11 @@ Merge to production branch
     └  smoke test against production immediately after deploy
 ```
 
-**Minimum viable gate chain (solo project):** Gates 1, 2, 3, 5, 8.
+**Staging is always working.** Gate 6 is a hard gate — a failing E2E smoke on staging blocks the path to production. If the full E2E suite takes too long to run on every merge, split it:
+- **On merge to staging** → fast smoke suite (critical user flows, <5 min)
+- **Nightly** → full E2E suite against staging (all flows, edge cases, slow tests)
+
+**Minimum viable gate chain (solo project):** Gates 1, 2, 3, 5, 6, 8.
 
 ## Database Migration Safety
 
@@ -119,7 +124,7 @@ When to graduate to a flag service: when you have >3 active flags, or when flag 
 ### Flag cleanup
 
 Feature flags accumulate as technical debt. For each flag, define an expiry condition:
-- "Remove this flag when the new rewards system is verified in production for 2 weeks"
+- "Remove this flag when the new feature is verified in production for 2 weeks"
 - Add a TODO or ticket for flag removal at the time of creation
 
 ## Deploy Confidence Checklist
