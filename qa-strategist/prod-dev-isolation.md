@@ -105,13 +105,13 @@ For small teams, a simple environment variable or database flag is sufficient:
 
 ```typescript
 // Server-side: environment variable
-const ENABLE_NEW_REWARDS = process.env.ENABLE_NEW_REWARDS === 'true';
+const ENABLE_NEW_FEATURE = process.env.ENABLE_NEW_FEATURE === 'true';
 
-// Database flag (per-family or per-user)
+// Database flag (per-user or per-tenant)
 const { feature_flags } = await db.query(
-  `SELECT feature_flags FROM families WHERE id = $1`, [familyId]
+  `SELECT feature_flags FROM users WHERE id = $1`, [userId]
 );
-const ENABLE_NEW_REWARDS = feature_flags?.newRewards ?? false;
+const ENABLE_NEW_FEATURE = feature_flags?.newFeature ?? false;
 ```
 
 When to graduate to a flag service: when you have >3 active flags, or when flag updates need to happen without a redeploy.
