@@ -1,6 +1,8 @@
 # agent-skills
 
-> **Agent skills for VS Code Copilot** — open-source, composable, designed for the agentic era.
+> **Open-source agent skills** — composable, model-agnostic, designed for the agentic era.
+>
+> Compatible with **GitHub Copilot** (VS Code) and **Claude** (via the `.agents/skills/` convention).
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
@@ -12,7 +14,7 @@ When generating code becomes easier, the scarce thing is no longer code. **It is
 
 Quality scaffolding and good QA practices matter more than ever in the agentic era — not less. Every change an agent makes needs a clear definition of done. Every feature shipped needs behavioral assertions that prove it works. Tests are not bureaucracy; they are unambiguous contracts that agents and humans both can verify.
 
-This repo packages that expertise as installable Copilot skills and ready-to-use agent templates.
+This repo packages that expertise as installable agent skills and ready-to-use agent templates.
 
 ---
 
@@ -30,7 +32,7 @@ More skills coming.
 
 Skills install into your project's `.agents/skills/` directory and are tracked in `skills-lock.json`.
 
-Open VS Code with GitHub Copilot, then run the install command for the skill you want (refer to your Copilot skill installation docs). Or manually add the entry to `skills-lock.json`:
+Run the install command for the skill you want, or manually add the entry to `skills-lock.json`:
 
 ```json
 {
@@ -44,7 +46,7 @@ Open VS Code with GitHub Copilot, then run the install command for the skill you
 }
 ```
 
-Once installed, the skill is automatically available to all Copilot agents in your workspace.
+Once installed, the skill is automatically available to all agents in your workspace (Copilot, Claude, or any agent that reads `.agents/skills/`).
 
 ---
 
@@ -61,7 +63,7 @@ cp agents/qa-strategist.agent.md /your-project/.github/agents/qa-strategist.agen
 # 2. Make sure the qa-strategist skill is installed (see above)
 ```
 
-Then invoke from VS Code Chat:
+Then invoke from your agent chat (Copilot, Claude, or equivalent):
 
 > `@qa-strategist assess my current QA coverage`
 
@@ -111,7 +113,11 @@ The agent starts by asking questions to understand your project's current state 
     spec-writing.md     agentic-coding-qa.md        ...
 ```
 
-The **skill** provides domain knowledge. The **agent** provides personality, interaction style, and routing logic. You can use the skills without the agent, or wire the agent to your own persona.
+The **agent** is opinionated: it has a philosophy, a point of view, and a preferred way of working. It asks questions before prescribing, pushes back when needed, and adapts its output format to the task.
+
+The **skills** are neutral: they are procedure-oriented reference documents — routing tables, checklists, decision trees, and playbooks. No personality, no framing. They load cleanly into any agent, including ones with a different persona.
+
+You can use the skills without the agent, or wire the agent to your own persona.
 
 ---
 

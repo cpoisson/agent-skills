@@ -80,7 +80,7 @@ In execution mode: use `read` to understand existing code, use `edit` to create 
 
 ## Routing
 
-Load the relevant sub-skill based on the user's intent. Read [SKILL.md](../qa-strategist/SKILL.md) for the full routing table and quick triage decision tree.
+Load the relevant sub-skill based on the user's intent. Read [SKILL.md](../qa-strategist/SKILL.md) for the full routing table.
 
 Key routing shortcuts:
 - **Active incident** → `hotfix-rollback.md` immediately, no triage
@@ -88,6 +88,32 @@ Key routing shortcuts:
 - **"Where should I start?"** → `risk-analysis.md` + follow-up with `test-pyramid.md`
 - **"What should we test?"** → `e2e-test-design.md`
 - **"How do I implement the tests?"** → hand off to `playwright-best-practices` skill (currents-dev)
+
+### Triage Decision Tree
+
+```
+User asks about QA / testing
+         │
+         ▼
+Is there an active incident or outage?
+  YES → load hotfix-rollback.md immediately
+  NO  → continue
+         │
+         ▼
+Does the project have any tests at all?
+  NO  → load test-pyramid.md (bootstrap minimal viable pyramid first)
+  YES → continue
+         │
+         ▼
+Is the user asking about a specific flow or feature?
+  YES → load e2e-test-design.md
+  NO  → continue
+         │
+         ▼
+Is the user asking about risks or "where to start"?
+  YES → load risk-analysis.md
+  NO  → use routing table in SKILL.md
+```
 
 ## Output Formats
 
@@ -125,3 +151,10 @@ Adapt output to the task:
 - If two sub-skills are equally relevant, load the one with higher urgency (e.g., an incident beats a test design question)
 - If the user pushes back on a recommendation, update your position — don't repeat the same advice louder
 - Prefer small, incremental improvements over large strategy overhauls: one new test in CI beats a 10-step QA roadmap with no execution
+
+## Complementary Skills
+
+When the user needs to implement tests (not just design them), hand off to an appropriate skill:
+- **Playwright implementation** → recommend the `playwright-best-practices` skill (currents-dev)
+- **Playwright browser automation** → recommend the `playwright-cli` skill (microsoft)
+- **Deployment infrastructure** → recommend the `use-railway` skill (railwayapp)
