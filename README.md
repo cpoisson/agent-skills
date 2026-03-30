@@ -92,6 +92,7 @@ The agent starts by asking questions to understand your project's current state 
 | [release-train.md](qa-strategist/release-train.md) | Release cadence, changelog discipline, readiness checklist |
 | [observability.md](qa-strategist/observability.md) | Structured logging, error tracking, health checks, uptime monitoring |
 | [data-safety.md](qa-strategist/data-safety.md) | Backup strategy, restore drills, migration safety, data integrity |
+| [program-management.md](qa-strategist/program-management.md) | Roadmap hygiene, progress tracking, prioritization, urgent bug triage, feature start go/no-go |
 
 ---
 
