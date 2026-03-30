@@ -53,7 +53,7 @@ Write a test that **reproduces the bug and currently fails**. This is non-negoti
 Ask yourself: **Is the expected correct behavior explicitly described in the ticket?**
 
 - **Yes** → write the test directly from the ticket's acceptance criteria
-- **No / ambiguous** → **use `ask_user` to ask a clarifying question before proceeding**
+- **No / ambiguous** → ask the user, issue owner, or ticket reporter a clarifying question before proceeding
 
 #### Questions to ask when behavior is ambiguous
 
@@ -96,7 +96,7 @@ Before editing production code, write a short fix plan (a few bullet points is e
 3. **Approach** — what is the minimal change that makes the test pass?
 4. **Side effects** — what adjacent behavior could be affected? Which existing tests cover that area?
 
-> If the root cause is not clear from reading the code, use `search` and `read` to trace the data flow before planning. Do not guess.
+> If the root cause is not clear from reading the code, inspect the relevant files and trace the data flow before planning. Do not guess.
 
 Document the plan as a comment in the PR description (written in Step 6) — it becomes the review narrative.
 

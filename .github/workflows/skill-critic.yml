@@ -1,0 +1,23 @@
+name: Skill Critic
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  skill-critic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run skill critic
+        run: ./scripts/skill_critic.py --thresholds-file evals/skill_critic_thresholds.json --markdown-out skill-evaluations.md
+      - name: Upload evaluation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-evaluations
+          path: skill-evaluations.md

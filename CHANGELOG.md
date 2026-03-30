@@ -1,0 +1,25 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+
+- Assistant adapter files for Codex/OpenAI, Claude, and GitHub Copilot via `AGENTS.md`, `CLAUDE.md`, `.claude/agents/qa-strategist.md`, and `.github/copilot-instructions.md`
+- A local skill critic executable in `scripts/skill_critic.py`
+- Routing eval cases in `evals/skill_critic_cases.json`
+- Threshold-based quality gates in `evals/skill_critic_thresholds.json`
+- CI enforcement in `.github/workflows/skill-critic.yml`
+- A generated evaluation report in `EVALUATIONS.md`
+- Load-budget checks for single-route and two-route skill loading paths
+
+### Changed
+
+- Expanded `AGENTS.md` into a project-specific coding-agent playbook covering authoring rules, portability rules, evaluation procedure, load-budget guidance, and definition of done
+- Added a self-hosting rule so repository process changes are expected to use `qa-strategist` guidance on the repository itself
+- Expanded `qa-strategist` trigger metadata to better match GitHub issue fixes, ticket-driven bug work, bootstrap-testing prompts, and issue-prioritization requests
+- Removed assistant-specific tool names from `qa-strategist/bug-fix.md` so the shared skill content stays portable across assistants
