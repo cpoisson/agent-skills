@@ -81,6 +81,7 @@ class Thresholds:
     min_routing: float | None = None
     min_portability: float | None = None
     min_description: float | None = None
+    min_cases_per_route: int | None = None
     max_single_route_load_words: int | None = None
     max_two_route_load_words: int | None = None
     strict_findings: bool = False
@@ -336,6 +337,15 @@ def route_word_metrics(description: str, skill_md_text: str, routes: list[SkillR
     }
 
 
+def case_coverage_metrics(cases: list[dict[str, object]], routes: list[SkillRoute]) -> dict[str, object]:
+    route_counts = Counter(str(case["expected"]) for case in cases)
+    route_slugs = [route.slug for route in routes]
+    return {
+        "route_case_counts": [{"slug": slug, "count": route_counts.get(slug, 0)} for slug in sorted(route_slugs)],
+        "routes_without_cases": [slug for slug in sorted(route_slugs) if route_counts.get(slug, 0) == 0],
+    }
+
+
 def load_thresholds(args: argparse.Namespace) -> Thresholds:
     threshold_values: dict[str, object] = {}
     if args.thresholds_file:
@@ -345,6 +355,7 @@ def load_thresholds(args: argparse.Namespace) -> Thresholds:
         "min_routing",
         "min_portability",
         "min_description",
+        "min_cases_per_route",
         "max_single_route_load_words",
         "max_two_route_load_words",
     ):
@@ -363,6 +374,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-routing", type=float, help="Fail if a skill routing eval score falls below this value.")
     parser.add_argument("--min-portability", type=float, help="Fail if a skill portability score falls below this value.")
     parser.add_argument("--min-description", type=float, help="Fail if a skill description score falls below this value.")
+    parser.add_argument("--min-cases-per-route", type=int, help="Fail if any routed sub-skill has fewer eval cases than this.")
     parser.add_argument(
         "--max-single-route-load-words",
         type=int,
@@ -393,6 +405,7 @@ def render_markdown(report: dict[str, object]) -> str:
         f"- `min_routing`: {report['thresholds']['min_routing']}",
         f"- `min_portability`: {report['thresholds']['min_portability']}",
         f"- `min_description`: {report['thresholds']['min_description']}",
+        f"- `min_cases_per_route`: {report['thresholds']['min_cases_per_route']}",
         f"- `max_single_route_load_words`: {report['thresholds']['max_single_route_load_words']}",
         f"- `max_two_route_load_words`: {report['thresholds']['max_two_route_load_words']}",
         "",
@@ -428,6 +441,9 @@ def render_markdown(report: dict[str, object]) -> str:
                 lines.append(f"- {finding}")
         else:
             lines.append("No findings.")
+        lines.append("Route eval coverage:")
+        for coverage in skill["metrics"]["route_case_counts"]:
+            lines.append(f"- `{coverage['slug']}`: {coverage['count']} cases")
         lines.append("Top route file sizes:")
         for route_metric in skill["metrics"]["route_word_counts"][:5]:
             lines.append(f"- `{route_metric['slug']}`: {route_metric['words']} words")
@@ -450,6 +466,7 @@ def main() -> int:
             "min_routing": thresholds.min_routing,
             "min_portability": thresholds.min_portability,
             "min_description": thresholds.min_description,
+            "min_cases_per_route": thresholds.min_cases_per_route,
             "max_single_route_load_words": thresholds.max_single_route_load_words,
             "max_two_route_load_words": thresholds.max_two_route_load_words,
             "strict_findings": thresholds.strict_findings,
@@ -463,8 +480,10 @@ def main() -> int:
         frontmatter = parse_frontmatter(skill_md)
         description = frontmatter.get("description", "")
         routes = parse_routes(skill_md)
+        cases = json.loads(read_text(EVAL_CASES_PATH))
         directory_words = sum(count_words(read_text(path)) for path in skill_root.rglob("*.md"))
         load_metrics = route_word_metrics(description, skill_md_text, routes)
+        coverage_metrics = case_coverage_metrics(cases, routes)
 
         description_score, description_findings = score_description(description)
         structure_score, structure_findings = score_structure(skill_root, routes)
@@ -494,6 +513,16 @@ def main() -> int:
             threshold_failures.append(f"portability {portability_score} < {thresholds.min_portability}")
         if thresholds.min_description is not None and description_score < thresholds.min_description:
             threshold_failures.append(f"description {description_score} < {thresholds.min_description}")
+        if thresholds.min_cases_per_route is not None:
+            undercovered = [
+                item["slug"]
+                for item in coverage_metrics["route_case_counts"]
+                if item["count"] < thresholds.min_cases_per_route
+            ]
+            if undercovered:
+                threshold_failures.append(
+                    f"routes below min_cases_per_route {thresholds.min_cases_per_route}: {', '.join(undercovered)}"
+                )
         if (
             thresholds.max_single_route_load_words is not None
             and load_metrics["max_single_route_load_words"] > thresholds.max_single_route_load_words
@@ -530,6 +559,7 @@ def main() -> int:
                     "skill_md_words": count_words(skill_md_text),
                     "max_single_route_load_words": load_metrics["max_single_route_load_words"],
                     "max_two_route_load_words": load_metrics["max_two_route_load_words"],
+                    "route_case_counts": coverage_metrics["route_case_counts"],
                     "route_word_counts": load_metrics["route_word_counts"],
                     "directory_words": directory_words,
                 },

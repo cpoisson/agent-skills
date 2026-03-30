@@ -3,6 +3,7 @@
   "min_routing": 90,
   "min_portability": 90,
   "min_description": 85,
+  "min_cases_per_route": 2,
   "max_single_route_load_words": 2400,
   "max_two_route_load_words": 3600
 }

@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A local skill critic executable in `scripts/skill_critic.py`
 - Routing eval cases in `evals/skill_critic_cases.json`
 - Threshold-based quality gates in `evals/skill_critic_thresholds.json`
+- A provider-swappable semantic judge in `scripts/semantic_skill_judge.py` for `openai`, `ollama`, `llamacpp`, and `huggingface`
+- Semantic judge thresholds in `evals/semantic_judge_thresholds.json`
 - CI enforcement in `.github/workflows/skill-critic.yml`
 - A generated evaluation report in `EVALUATIONS.md`
 - Load-budget checks for single-route and two-route skill loading paths
@@ -21,5 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Expanded `AGENTS.md` into a project-specific coding-agent playbook covering authoring rules, portability rules, evaluation procedure, load-budget guidance, and definition of done
 - Added a self-hosting rule so repository process changes are expected to use `qa-strategist` guidance on the repository itself
+- Expanded routing eval coverage so every routed `qa-strategist` sub-skill has semantic prompt variations
 - Expanded `qa-strategist` trigger metadata to better match GitHub issue fixes, ticket-driven bug work, bootstrap-testing prompts, and issue-prioritization requests
 - Removed assistant-specific tool names from `qa-strategist/bug-fix.md` so the shared skill content stays portable across assistants

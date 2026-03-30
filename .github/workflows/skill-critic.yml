@@ -21,3 +21,22 @@ jobs:
         with:
           name: skill-evaluations
           path: skill-evaluations.md
+
+  semantic-judge:
+    if: ${{ secrets.OPENAI_API_KEY != '' }}
+    runs-on: ubuntu-latest
+    needs: skill-critic
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run semantic judge
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: ./scripts/semantic_skill_judge.py --provider openai --model gpt-5-mini --thresholds-file evals/semantic_judge_thresholds.json --markdown-out semantic-judge.md
+      - name: Upload semantic judge report
+        uses: actions/upload-artifact@v4
+        with:
+          name: semantic-judge-evaluations
+          path: semantic-judge.md

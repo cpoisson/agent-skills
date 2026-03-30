@@ -1,52 +1,184 @@
 [
   {
-    "prompt": "Fix GitHub issue #482 in the checkout flow.",
-    "expected": "bug-fix",
-    "reason": "A GitHub issue that asks for an implementation fix should route to the bug-fix workflow."
-  },
-  {
-    "prompt": "Reproduce the login bug from this ticket, write a failing test, and open a PR.",
-    "expected": "bug-fix",
-    "reason": "The prompt explicitly asks for reproduction, a failing test, and a PR."
-  },
-  {
-    "prompt": "We have 12 open GitHub issues. Which ones should we prioritize next sprint?",
-    "expected": "program-management",
-    "reason": "This is prioritization and planning, not an execution workflow for one confirmed defect."
-  },
-  {
     "prompt": "What are our biggest quality risks right now?",
     "expected": "risk-analysis",
-    "reason": "This is a classic QA risk triage request."
+    "reason": "Classic QA risk triage request.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "Where should we start if we want the highest confidence payoff from QA work?",
+    "expected": "risk-analysis",
+    "reason": "Asks for prioritizing risks and QA actions.",
+    "category": "positive",
+    "variation": "semantic"
   },
   {
     "prompt": "We have no tests. How should we bootstrap unit, integration, and e2e coverage?",
     "expected": "test-pyramid",
-    "reason": "The prompt is about test strategy and layer design."
+    "reason": "About test strategy and layer design.",
+    "category": "positive",
+    "variation": "direct"
   },
   {
-    "prompt": "Production is down after a deploy. I need a rollback plan now.",
-    "expected": "hotfix-rollback",
-    "reason": "This is an active incident and should route to the emergency playbook."
+    "prompt": "Give me a pragmatic testing pyramid for a codebase that currently has zero automated tests.",
+    "expected": "test-pyramid",
+    "reason": "Asks for a test pyramid and bootstrapping plan.",
+    "category": "positive",
+    "variation": "semantic"
   },
   {
-    "prompt": "Should we release today?",
-    "expected": "release-train",
-    "reason": "This is a release readiness decision."
+    "prompt": "Design e2e tests for the signup and password reset flows.",
+    "expected": "e2e-test-design",
+    "reason": "Explicit request for end-to-end test design on user flows.",
+    "category": "positive",
+    "variation": "direct"
   },
   {
-    "prompt": "What logging, alerting, and health checks should we add after launch?",
-    "expected": "observability",
-    "reason": "This is about telemetry and post-deploy visibility."
+    "prompt": "Which user journeys should we automate first, and what scenarios belong in that coverage matrix?",
+    "expected": "e2e-test-design",
+    "reason": "About critical paths, automation priority, and coverage matrix.",
+    "category": "positive",
+    "variation": "semantic"
   },
   {
     "prompt": "Help me write acceptance criteria for the rewards feature.",
     "expected": "spec-writing",
-    "reason": "This is a specification and acceptance criteria request."
+    "reason": "Specification and acceptance criteria request.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "Turn this vague feature request into a clear spec with definition of done and edge cases.",
+    "expected": "spec-writing",
+    "reason": "Asks for specification drafting and clarification of ambiguous requirements.",
+    "category": "positive",
+    "variation": "semantic"
+  },
+  {
+    "prompt": "Review this AI-generated change and tell me what evidence would make it actually done.",
+    "expected": "agentic-coding-qa",
+    "reason": "Definition of done and verification for AI-generated code.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "I used a coding agent for this feature. How should I verify it without trusting the diff?",
+    "expected": "agentic-coding-qa",
+    "reason": "Asks for QA discipline specific to agent-written code.",
+    "category": "positive",
+    "variation": "semantic"
   },
   {
     "prompt": "Is my staging environment set up correctly for QA?",
     "expected": "test-environments",
-    "reason": "This is an environment parity and setup audit."
+    "reason": "Environment parity and setup audit.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "Can you audit whether our local, staging, and production environments are close enough to trust test results?",
+    "expected": "test-environments",
+    "reason": "Asks about environment parity and test-data confidence.",
+    "category": "positive",
+    "variation": "semantic"
+  },
+  {
+    "prompt": "What controls should we put in place so a bad deploy cannot damage production data or users?",
+    "expected": "prod-dev-isolation",
+    "reason": "Production safety and blast-radius controls.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "We need stronger deploy gates, feature flags, and migration safeguards before shipping this feature.",
+    "expected": "prod-dev-isolation",
+    "reason": "Explicitly about deploy gates and migration safety.",
+    "category": "positive",
+    "variation": "semantic"
+  },
+  {
+    "prompt": "Production is down after a deploy. I need a rollback plan now.",
+    "expected": "hotfix-rollback",
+    "reason": "Active incident should route to emergency playbook.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "We shipped a bad release and need to contain impact fast. Walk me through rollback and hotfix steps.",
+    "expected": "hotfix-rollback",
+    "reason": "Emergency rollback and hotfix guidance.",
+    "category": "positive",
+    "variation": "semantic"
+  },
+  {
+    "prompt": "Should we release today?",
+    "expected": "release-train",
+    "reason": "Release readiness decision.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "I need a go or no-go call for this release, including readiness checks and changelog discipline.",
+    "expected": "release-train",
+    "reason": "Release readiness and process discipline.",
+    "category": "positive",
+    "variation": "semantic"
+  },
+  {
+    "prompt": "What logging, alerting, and health checks should we add after launch?",
+    "expected": "observability",
+    "reason": "Telemetry and post-deploy visibility.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "Our app is hard to monitor in production. What should we instrument for errors, health, and alerts?",
+    "expected": "observability",
+    "reason": "Requests observability strategy and instrumentation.",
+    "category": "positive",
+    "variation": "semantic"
+  },
+  {
+    "prompt": "How should we handle backups, restore drills, and migration safety for this system?",
+    "expected": "data-safety",
+    "reason": "Backup, restore, and migration safety question.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "I am worried a schema change could corrupt data. What backup and recovery safeguards should exist first?",
+    "expected": "data-safety",
+    "reason": "Focuses on data integrity, backups, and restore readiness.",
+    "category": "positive",
+    "variation": "semantic"
+  },
+  {
+    "prompt": "Fix GitHub issue #482 in the checkout flow.",
+    "expected": "bug-fix",
+    "reason": "A GitHub issue that asks for an implementation fix should route to the bug-fix workflow.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "Reproduce the login bug from this ticket, write a failing test, and open a PR.",
+    "expected": "bug-fix",
+    "reason": "Explicitly asks for reproduction, a failing test, and a PR.",
+    "category": "positive",
+    "variation": "semantic"
+  },
+  {
+    "prompt": "We have 12 open GitHub issues. Which ones should we prioritize next sprint?",
+    "expected": "program-management",
+    "reason": "Prioritization and planning, not a single bug execution workflow.",
+    "category": "positive",
+    "variation": "direct"
+  },
+  {
+    "prompt": "Given the roadmap and urgent bug queue, what should the team work on next and what should wait?",
+    "expected": "program-management",
+    "reason": "Program planning and prioritization request.",
+    "category": "positive",
+    "variation": "semantic"
   }
 ]

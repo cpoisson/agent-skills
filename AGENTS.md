@@ -14,7 +14,8 @@ This repository publishes assistant-portable skill content.
 - The other markdown files in `qa-strategist/` are routed sub-skills.
 - `AGENTS.md`, `CLAUDE.md`, `.claude/agents/`, and `.github/copilot-instructions.md` are adapter layers for specific assistants.
 - `evals/` stores routing fixtures and quality thresholds.
-- `scripts/skill_critic.py` is the local and CI validation entrypoint.
+- `scripts/skill_critic.py` is the deterministic validation entrypoint.
+- `scripts/semantic_skill_judge.py` is the provider-swappable semantic routing judge.
 
 ## Self-Hosting Rule
 
@@ -48,15 +49,24 @@ This repository publishes assistant-portable skill content.
 ## Evaluation And CI
 
 - Run the critic before merging changes that touch skill metadata, routing, or adapter files:
+  Deterministic gate:
 
 ```bash
 ./scripts/skill_critic.py --thresholds-file evals/skill_critic_thresholds.json --markdown-out EVALUATIONS.md
 ```
 
+- Semantic judge:
+
+```bash
+./scripts/semantic_skill_judge.py --provider openai --model gpt-5-mini --thresholds-file evals/semantic_judge_thresholds.json --markdown-out /tmp/semantic-judge.md
+```
+
 - The quality gate currently checks:
   - score thresholds for description, routing recall, portability, and total quality
+  - minimum eval-case coverage per routed sub-skill
   - load budget for the single-route path
   - load budget for the two-route path
+- The semantic judge is a second-layer check. It is useful for paraphrases and semantic drift, but the deterministic critic remains the hard baseline.
 - Update `evals/skill_critic_cases.json` whenever a real-world prompt reveals a recall miss.
 - Update `evals/skill_critic_thresholds.json` only when intentionally changing the quality bar.
 - Keep `EVALUATIONS.md` refreshed when the critic behavior or thresholds change.
