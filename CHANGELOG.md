@@ -24,5 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expanded `AGENTS.md` into a project-specific coding-agent playbook covering authoring rules, portability rules, evaluation procedure, load-budget guidance, and definition of done
 - Added a self-hosting rule so repository process changes are expected to use `qa-strategist` guidance on the repository itself
 - Expanded routing eval coverage so every routed `qa-strategist` sub-skill has semantic prompt variations
+- Split CI into separate deterministic and semantic jobs, and switched the semantic job to Ollama with `qwen2.5:1.5b` as the default fast backend
 - Expanded `qa-strategist` trigger metadata to better match GitHub issue fixes, ticket-driven bug work, bootstrap-testing prompts, and issue-prioritization requests
 - Removed assistant-specific tool names from `qa-strategist/bug-fix.md` so the shared skill content stays portable across assistants

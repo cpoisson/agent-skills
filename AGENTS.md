@@ -58,7 +58,7 @@ This repository publishes assistant-portable skill content.
 - Semantic judge:
 
 ```bash
-./scripts/semantic_skill_judge.py --provider openai --model gpt-5-mini --thresholds-file evals/semantic_judge_thresholds.json --markdown-out /tmp/semantic-judge.md
+./scripts/semantic_skill_judge.py --provider ollama --model qwen2.5:1.5b --thresholds-file evals/semantic_judge_thresholds.json --markdown-out /tmp/semantic-judge.md
 ```
 
 - The quality gate currently checks:
@@ -67,6 +67,7 @@ This repository publishes assistant-portable skill content.
   - load budget for the single-route path
   - load budget for the two-route path
 - The semantic judge is a second-layer check. It is useful for paraphrases and semantic drift, but the deterministic critic remains the hard baseline.
+- The default fast semantic backend is Ollama with `qwen2.5:1.5b` because it cleared the current threshold locally while running faster than the larger local alternatives tested.
 - Update `evals/skill_critic_cases.json` whenever a real-world prompt reveals a recall miss.
 - Update `evals/skill_critic_thresholds.json` only when intentionally changing the quality bar.
 - Keep `EVALUATIONS.md` refreshed when the critic behavior or thresholds change.
