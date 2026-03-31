@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI enforcement in `.github/workflows/skill-critic.yml`
 - A generated evaluation report in `EVALUATIONS.md`
 - Load-budget checks for single-route and two-route skill loading paths
+- Negative-control and guided eval cases for `qa-strategist`
+- A repository `ROADMAP.md` with QA-backed skill improvement and new-skill priorities
 
 ### Changed
 
@@ -31,3 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reworked `README.md` to position `qa-strategist` as a QA-confidence skill for bug fixes and feature shipping, switched the quick install to `npx skills add cpoisson/agent-skills`, advertised tests more explicitly, and added collapsible agent-specific setup notes
 - Added explicit evaluation metrics and quality-gate thresholds to `README.md`, including the deterministic critic, semantic routing accuracy target, and commands to run both checks
 - Rebalanced `ROADMAP.md` toward first-run adoption, expected-behavior clarity, and confidence-oriented documentation
+- Expanded the deterministic critic and semantic judge from route-only evaluation into trigger-plus-routing evaluation with negative controls, ambiguity coverage, and richer failure reporting
+- Updated `qa-strategist/agentic-coding-qa.md` to emphasize reliability, evidence-before-exit, and efficiency as first-class QA signals for agent-written code
+- Stopped ignoring `ROADMAP.md` so repository planning and skill-priority decisions can be versioned with the rest of the QA process
+- Switched docs and CI examples to `python3 scripts/...` invocation for better portability across environments that do not allow direct script execution
+- Added a short related-work section to `README.md` linking the most relevant recent papers and talks on skill benchmarking, agent reliability, and agentic evaluation

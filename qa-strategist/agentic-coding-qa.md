@@ -12,6 +12,28 @@ An AI coding agent can:
 
 **"It compiles" is not a definition of done. "The tests pass" is only as good as the tests.**
 
+## Evaluate Across Four Dimensions
+
+When reviewing agent-written work, score it on four separate dimensions instead of collapsing everything into a single "looks fine" judgment:
+
+- **Outcome** — did the change produce the correct user-visible or system-visible result?
+- **Process** — did the agent follow the expected sequence and validate the right boundaries?
+- **Style** — are naming, file placement, output format, and communication aligned with project conventions?
+- **Efficiency** — did the agent avoid unnecessary edits, commands, retries, or context bloat?
+
+A change can pass on outcome while still failing on process or efficiency. That distinction matters because inefficient or poorly verified work is more likely to regress later.
+
+## Reliability Matters Separately From Accuracy
+
+Treat correctness and reliability as separate checks:
+
+- **Consistency** — does the same prompt or task produce the same conclusion across repeated runs?
+- **Robustness** — do small prompt changes, edge cases, or environment differences cause abrupt failure?
+- **Predictability** — does the agent know when it is unsure and call out missing evidence?
+- **Safety** — if the agent is wrong, is the failure bounded or can it damage data, production state, or release quality?
+
+An agent that is "usually right" but fails unpredictably is not ready for unattended use on high-risk paths.
+
 ## Definition of Done for Agent-Generated Code
 
 A task is done when all of the following are true:
@@ -30,12 +52,14 @@ A task is done when all of the following are true:
 - [ ] **Input is validated** at the system boundary (API request bodies, user form inputs)
 - [ ] **Data mutations are safe** — no destructive DB operations without appropriate guards
 - [ ] **The change works in staging** (for API/backend changes)
+- [ ] **Exit claims are evidence-backed** — the agent can point to a test, log, diff, or manual check for each key completion claim
 
 ### Tier 3 — For changes to critical flows
 
 - [ ] **E2E smoke test passes** for any affected user-facing flow
 - [ ] **Spec is updated** if behavior diverged from the existing spec
 - [ ] **Risk register is reviewed** if the change touches an area marked high-risk
+- [ ] **Rollback or containment path is known** if the change can harm production behavior
 
 ## Test-as-Contract Pattern
 
@@ -85,7 +109,10 @@ After completing a task, an agent should run through this checklist before decla
 6. Check for secrets:      grep for hardcoded credentials, tokens, or passwords
 7. Read the failing test:  if any test fails, understand why before dismissing it
 8. Smoke test:             if the task affects a UI flow, manually verify it works
+9. Verify completion:      map every "done" claim to concrete evidence
 ```
+
+The critical rule is simple: **never declare success from reasoning alone**. A coding agent should exit with evidence, not confidence.
 
 ## Common Agent Failure Modes
 
@@ -94,6 +121,8 @@ After completing a task, an agent should run through this checklist before decla
 | Scope creep — touches unrelated files | `git diff` review before commit | Tight task scoping; one task per PR |
 | Plausible but wrong logic | Tests with edge cases; review AC | Test-first specification |
 | Silently drops error handling | Code review; integration test with error cases | Unhappy path tests required |
+| Incorrect verification — declares success without proof | Compare claims to test/log evidence | Require evidence before exit |
+| Premature termination — stops after partial progress | Check AC/test checklist completeness | Explicit done checklist and stop conditions |
 | Removes used code incorrectly | `grep` for removed symbols; TypeScript errors | Full type check before merge |
 | Passes tests written for wrong spec | Manual review of test assertions | AC-to-test traceability |
 | Hardcodes test data in production code | Secret scanning; code review | Only constants in a dedicated config file |
@@ -140,3 +169,5 @@ Better proxies for agentic code quality:
 - **AC coverage** — are all acceptance criteria mapped to a test?
 - **Regression rate** — how many bugs are caught before production vs. after?
 - **Definition of done adherence** — does every PR have test coverage for new behavior?
+- **Verification quality** — do completion claims consistently cite real evidence?
+- **Efficiency trend** — is the agent solving the same class of task with fewer retries and less noise over time?

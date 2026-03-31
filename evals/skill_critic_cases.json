@@ -1,184 +1,290 @@
 [
   {
+    "id": "risk-analysis-01",
     "prompt": "What are our biggest quality risks right now?",
-    "expected": "risk-analysis",
+    "should_trigger": true,
+    "expected_route": "risk-analysis",
     "reason": "Classic QA risk triage request.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "risk-analysis-02",
     "prompt": "Where should we start if we want the highest confidence payoff from QA work?",
-    "expected": "risk-analysis",
+    "should_trigger": true,
+    "expected_route": "risk-analysis",
     "reason": "Asks for prioritizing risks and QA actions.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "test-pyramid-01",
     "prompt": "We have no tests. How should we bootstrap unit, integration, and e2e coverage?",
-    "expected": "test-pyramid",
+    "should_trigger": true,
+    "expected_route": "test-pyramid",
     "reason": "About test strategy and layer design.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "test-pyramid-02",
     "prompt": "Give me a pragmatic testing pyramid for a codebase that currently has zero automated tests.",
-    "expected": "test-pyramid",
+    "should_trigger": true,
+    "expected_route": "test-pyramid",
     "reason": "Asks for a test pyramid and bootstrapping plan.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "e2e-test-design-01",
     "prompt": "Design e2e tests for the signup and password reset flows.",
-    "expected": "e2e-test-design",
+    "should_trigger": true,
+    "expected_route": "e2e-test-design",
     "reason": "Explicit request for end-to-end test design on user flows.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "e2e-test-design-02",
     "prompt": "Which user journeys should we automate first, and what scenarios belong in that coverage matrix?",
-    "expected": "e2e-test-design",
+    "should_trigger": true,
+    "expected_route": "e2e-test-design",
     "reason": "About critical paths, automation priority, and coverage matrix.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "spec-writing-01",
     "prompt": "Help me write acceptance criteria for the rewards feature.",
-    "expected": "spec-writing",
+    "should_trigger": true,
+    "expected_route": "spec-writing",
     "reason": "Specification and acceptance criteria request.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "spec-writing-02",
     "prompt": "Turn this vague feature request into a clear spec with definition of done and edge cases.",
-    "expected": "spec-writing",
+    "should_trigger": true,
+    "expected_route": "spec-writing",
     "reason": "Asks for specification drafting and clarification of ambiguous requirements.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "agentic-coding-qa-01",
     "prompt": "Review this AI-generated change and tell me what evidence would make it actually done.",
-    "expected": "agentic-coding-qa",
+    "should_trigger": true,
+    "expected_route": "agentic-coding-qa",
     "reason": "Definition of done and verification for AI-generated code.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "agentic-coding-qa-02",
     "prompt": "I used a coding agent for this feature. How should I verify it without trusting the diff?",
-    "expected": "agentic-coding-qa",
+    "should_trigger": true,
+    "expected_route": "agentic-coding-qa",
     "reason": "Asks for QA discipline specific to agent-written code.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "test-environments-01",
     "prompt": "Is my staging environment set up correctly for QA?",
-    "expected": "test-environments",
+    "should_trigger": true,
+    "expected_route": "test-environments",
     "reason": "Environment parity and setup audit.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "test-environments-02",
     "prompt": "Can you audit whether our local, staging, and production environments are close enough to trust test results?",
-    "expected": "test-environments",
+    "should_trigger": true,
+    "expected_route": "test-environments",
     "reason": "Asks about environment parity and test-data confidence.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "prod-dev-isolation-01",
     "prompt": "What controls should we put in place so a bad deploy cannot damage production data or users?",
-    "expected": "prod-dev-isolation",
+    "should_trigger": true,
+    "expected_route": "prod-dev-isolation",
     "reason": "Production safety and blast-radius controls.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "prod-dev-isolation-02",
     "prompt": "We need stronger deploy gates, feature flags, and migration safeguards before shipping this feature.",
-    "expected": "prod-dev-isolation",
+    "should_trigger": true,
+    "expected_route": "prod-dev-isolation",
     "reason": "Explicitly about deploy gates and migration safety.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "hotfix-rollback-01",
     "prompt": "Production is down after a deploy. I need a rollback plan now.",
-    "expected": "hotfix-rollback",
+    "should_trigger": true,
+    "expected_route": "hotfix-rollback",
     "reason": "Active incident should route to emergency playbook.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "hotfix-rollback-02",
     "prompt": "We shipped a bad release and need to contain impact fast. Walk me through rollback and hotfix steps.",
-    "expected": "hotfix-rollback",
+    "should_trigger": true,
+    "expected_route": "hotfix-rollback",
     "reason": "Emergency rollback and hotfix guidance.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "release-train-01",
     "prompt": "Should we release today?",
-    "expected": "release-train",
+    "should_trigger": true,
+    "expected_route": "release-train",
     "reason": "Release readiness decision.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "release-train-02",
     "prompt": "I need a go or no-go call for this release, including readiness checks and changelog discipline.",
-    "expected": "release-train",
+    "should_trigger": true,
+    "expected_route": "release-train",
     "reason": "Release readiness and process discipline.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "observability-01",
     "prompt": "What logging, alerting, and health checks should we add after launch?",
-    "expected": "observability",
+    "should_trigger": true,
+    "expected_route": "observability",
     "reason": "Telemetry and post-deploy visibility.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "observability-02",
     "prompt": "Our app is hard to monitor in production. What should we instrument for errors, health, and alerts?",
-    "expected": "observability",
+    "should_trigger": true,
+    "expected_route": "observability",
     "reason": "Requests observability strategy and instrumentation.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "data-safety-01",
     "prompt": "How should we handle backups, restore drills, and migration safety for this system?",
-    "expected": "data-safety",
+    "should_trigger": true,
+    "expected_route": "data-safety",
     "reason": "Backup, restore, and migration safety question.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "data-safety-02",
     "prompt": "I am worried a schema change could corrupt data. What backup and recovery safeguards should exist first?",
-    "expected": "data-safety",
+    "should_trigger": true,
+    "expected_route": "data-safety",
     "reason": "Focuses on data integrity, backups, and restore readiness.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "bug-fix-01",
     "prompt": "Fix GitHub issue #482 in the checkout flow.",
-    "expected": "bug-fix",
+    "should_trigger": true,
+    "expected_route": "bug-fix",
     "reason": "A GitHub issue that asks for an implementation fix should route to the bug-fix workflow.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "bug-fix-02",
     "prompt": "Reproduce the login bug from this ticket, write a failing test, and open a PR.",
-    "expected": "bug-fix",
+    "should_trigger": true,
+    "expected_route": "bug-fix",
     "reason": "Explicitly asks for reproduction, a failing test, and a PR.",
     "category": "positive",
     "variation": "semantic"
   },
   {
+    "id": "program-management-01",
     "prompt": "We have 12 open GitHub issues. Which ones should we prioritize next sprint?",
-    "expected": "program-management",
+    "should_trigger": true,
+    "expected_route": "program-management",
     "reason": "Prioritization and planning, not a single bug execution workflow.",
     "category": "positive",
     "variation": "direct"
   },
   {
+    "id": "program-management-02",
     "prompt": "Given the roadmap and urgent bug queue, what should the team work on next and what should wait?",
-    "expected": "program-management",
+    "should_trigger": true,
+    "expected_route": "program-management",
     "reason": "Program planning and prioritization request.",
     "category": "positive",
+    "variation": "semantic"
+  },
+  {
+    "id": "program-management-03",
+    "prompt": "Can we start this feature now, or are we missing too much around readiness and testing?",
+    "should_trigger": true,
+    "expected_route": "program-management",
+    "reason": "Guided start decision that should route to feature-start gating.",
+    "category": "ambiguous",
+    "variation": "guided"
+  },
+  {
+    "id": "agentic-coding-qa-03",
+    "prompt": "This agent-generated patch passes tests. What evidence says it is actually safe to merge?",
+    "should_trigger": true,
+    "expected_route": "agentic-coding-qa",
+    "reason": "Checks for evidence beyond passing tests and should hit agent verification guidance.",
+    "category": "ambiguous",
+    "variation": "guided"
+  },
+  {
+    "id": "negative-01",
+    "prompt": "Write a haiku about spring rain.",
+    "should_trigger": false,
+    "expected_route": null,
+    "reason": "Creative writing should not trigger the QA skill.",
+    "category": "negative",
+    "variation": "direct"
+  },
+  {
+    "id": "negative-02",
+    "prompt": "Translate this paragraph into German.",
+    "should_trigger": false,
+    "expected_route": null,
+    "reason": "Translation should not trigger the QA skill.",
+    "category": "negative",
+    "variation": "semantic"
+  },
+  {
+    "id": "negative-03",
+    "prompt": "Design a bold hero section for our landing page.",
+    "should_trigger": false,
+    "expected_route": null,
+    "reason": "A pure design request should not route into QA strategy.",
+    "category": "negative",
+    "variation": "direct"
+  },
+  {
+    "id": "negative-04",
+    "prompt": "Summarize the main idea of this essay in two sentences.",
+    "should_trigger": false,
+    "expected_route": null,
+    "reason": "Generic summarization should not trigger the QA skill.",
+    "category": "negative",
     "variation": "semantic"
   }
 ]

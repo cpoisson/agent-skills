@@ -80,24 +80,31 @@ Example prompts:
 
 ## Evaluation Metrics
 
-This repository keeps the skill measurable with a deterministic critic and a semantic routing judge.
+This repository keeps the skill measurable with a deterministic critic and a semantic trigger-plus-routing judge.
 
 - Deterministic quality gate:
   - total quality score at least `90`
-  - routing score at least `90`
+  - overall trigger and routing score at least `90`
   - portability score at least `90`
   - description score at least `85`
   - at least `2` eval cases per routed sub-skill
   - single-route load budget at most `2400` words
   - two-route load budget at most `3600` words
 - Semantic routing gate:
-  - minimum routing accuracy `0.85`
+  - minimum overall trigger and routing accuracy `0.85`
+
+The eval suite now includes:
+
+- positive route-selection cases
+- guided and ambiguous prompts
+- negative controls that should not trigger the skill
+- reporting split across trigger accuracy, triggered-route accuracy, and overall accuracy
 
 Run the checks with:
 
 ```bash
-./scripts/skill_critic.py --thresholds-file evals/skill_critic_thresholds.json --markdown-out EVALUATIONS.md
-./scripts/semantic_skill_judge.py --provider ollama --model qwen2.5:1.5b --thresholds-file evals/semantic_judge_thresholds.json --markdown-out /tmp/semantic-judge.md
+python3 scripts/skill_critic.py --thresholds-file evals/skill_critic_thresholds.json --markdown-out EVALUATIONS.md
+python3 scripts/semantic_skill_judge.py --provider ollama --model qwen2.5:1.5b --thresholds-file evals/semantic_judge_thresholds.json --markdown-out /tmp/semantic-judge.md
 ```
 
 The latest deterministic report is published in [EVALUATIONS.md](EVALUATIONS.md).
@@ -148,6 +155,16 @@ Open an issue before adding a new skill.
 - If you want a stronger persona, also copy [`agents/qa-strategist.agent.md`](agents/qa-strategist.agent.md) into your project
 
 </details>
+
+## Related Work
+
+This project sits in the same emerging space as recent work on agent reliability, skill evaluation, and agentic QA:
+
+- [SkillsBench: Benchmarking Agent Skills](https://arxiv.org/abs/2602.12670) - shows that curated skills can materially improve agent performance, but gains vary by domain and model
+- [Towards a Science of AI Agent Reliability](https://arxiv.org/abs/2602.16666) - argues that accuracy alone is not enough and frames reliability in terms of consistency, robustness, predictability, and safety
+- [Upskill: Generate and Evaluate Agent Skills](https://huggingface.co/blog/upskill) - focuses on generating skills from traces and evaluating them for both quality and token efficiency
+- [How to Evaluate and Test Agent Skills](https://www.youtube.com/watch?v=XUzUf_HCgvk) - practical walkthrough of skill eval design, including trigger tests, rubrics, and judge-based automation
+- [Agentic Evaluations Workshop](https://www.youtube.com/watch?v=UxMZfbWI3LY) - broad survey of current issues in agent evals, including transparency, environment-based testing, robustness, and governance
 
 ## License
 

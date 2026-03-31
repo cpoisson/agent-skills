@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Semantic routing evals using a switchable inference provider."""
+"""Semantic trigger and routing evals using a switchable inference provider."""
 
 from __future__ import annotations
 
@@ -10,11 +10,20 @@ import re
 import sys
 import urllib.error
 import urllib.request
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from skill_critic import EVAL_CASES_PATH, REPO_ROOT, parse_frontmatter, parse_routes, read_text
+from skill_critic import (
+    EVAL_CASES_PATH,
+    REPO_ROOT,
+    classify_failure_mode,
+    load_eval_cases,
+    parse_frontmatter,
+    parse_routes,
+    read_text,
+)
 
 
 DEFAULT_BASE_URLS = {
@@ -50,13 +59,19 @@ def load_dotenv(path: Path) -> None:
 
 @dataclass
 class JudgeResult:
+    case_id: str
     prompt: str
-    expected: str
-    predicted: str
+    category: str
+    variation: str
+    expected_trigger: bool
+    expected_route: str | None
+    predicted_trigger: bool
+    predicted_route: str
     passed: bool
     confidence: float | None
     rationale: str
     raw_response: str
+    failure_mode: str
 
 
 @dataclass
@@ -97,13 +112,6 @@ def resolve_provider_config(args: argparse.Namespace) -> ProviderConfig:
     return ProviderConfig(provider=provider, model=model, base_url=base_url, api_key=api_key)
 
 
-def load_cases(path: Path, max_cases: int | None) -> list[dict[str, Any]]:
-    cases = json.loads(read_text(path))
-    if max_cases is not None:
-        return cases[:max_cases]
-    return cases
-
-
 def build_routing_context(router_file: Path) -> tuple[str, list[str], str]:
     description = parse_frontmatter(router_file).get("description", "")
     routes = parse_routes(router_file)
@@ -116,16 +124,18 @@ def build_routing_context(router_file: Path) -> tuple[str, list[str], str]:
 
 def build_messages(prompt: str, description: str, route_context: str, allowed_routes: list[str]) -> tuple[str, str]:
     system_prompt = (
-        "You are evaluating which routed sub-skill should handle a user prompt. "
-        "Choose exactly one route slug from the allowed list. "
-        "Return JSON only with keys route, confidence, rationale."
+        "You are evaluating whether a QA skill should trigger for a user prompt and, if it should, "
+        "which routed sub-skill should handle it. "
+        "Choose exactly one route slug from the allowed list when the skill should trigger. "
+        "Return JSON only with keys should_trigger, route, confidence, rationale. "
+        "If should_trigger is false, route must be an empty string."
     )
     user_prompt = (
         f"Top-level skill description:\n{description}\n\n"
         f"Allowed routes:\n{route_context}\n\n"
         f"Allowed route slugs: {', '.join(allowed_routes)}\n\n"
         f"User prompt:\n{prompt}\n\n"
-        'Return JSON only, for example: {"route":"bug-fix","confidence":0.93,"rationale":"..."}'
+        'Return JSON only, for example: {"should_trigger":true,"route":"bug-fix","confidence":0.93,"rationale":"..."}'
     )
     return system_prompt, user_prompt
 
@@ -188,33 +198,51 @@ def extract_json_object(text: str) -> dict[str, Any]:
         return json.loads(match.group(0))
 
 
+def parse_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"true", "yes", "1"}:
+            return True
+        if normalized in {"false", "no", "0"}:
+            return False
+    return False
+
+
 def judge_prompt(
     config: ProviderConfig,
     prompt: str,
     description: str,
     allowed_routes: list[str],
     route_context: str,
-) -> tuple[str, float | None, str, str]:
+) -> tuple[bool, str, float | None, str, str]:
     system_prompt, user_prompt = build_messages(prompt, description, route_context, allowed_routes)
     if config.provider == "ollama":
         raw = call_ollama(config, system_prompt, user_prompt)
     else:
         raw = call_openai_compatible(config, system_prompt, user_prompt)
     parsed = extract_json_object(raw)
+    should_trigger = parse_bool(parsed.get("should_trigger"))
     predicted = str(parsed.get("route", "")).strip()
     if predicted not in allowed_routes:
+        predicted = ""
+    if not should_trigger:
         predicted = ""
     confidence_raw = parsed.get("confidence")
     confidence = float(confidence_raw) if isinstance(confidence_raw, (int, float)) else None
     rationale = str(parsed.get("rationale", "")).strip()
-    return predicted, confidence, rationale, raw
+    return should_trigger, predicted, confidence, rationale, raw
 
 
 def render_markdown(
     provider: ProviderConfig,
     min_accuracy: float,
-    accuracy: float,
-    counts: dict[str, int],
+    overall_accuracy: float,
+    trigger_accuracy: float,
+    route_accuracy: float,
+    route_counts: dict[str, int],
+    category_counts: dict[str, int],
     results: list[JudgeResult],
 ) -> str:
     lines = [
@@ -223,22 +251,32 @@ def render_markdown(
         f"- Provider: `{provider.provider}`",
         f"- Model: `{provider.model}`",
         f"- Base URL: `{provider.base_url}`",
-        f"- Minimum accuracy: `{min_accuracy:.2f}`",
-        f"- Actual accuracy: `{accuracy:.3f}`",
+        f"- Minimum overall accuracy: `{min_accuracy:.2f}`",
+        f"- Actual overall accuracy: `{overall_accuracy:.3f}`",
+        f"- Trigger accuracy: `{trigger_accuracy:.3f}`",
+        f"- Triggered-route accuracy: `{route_accuracy:.3f}`",
         "",
         "## Coverage",
         "",
     ]
-    for slug in sorted(counts):
-        lines.append(f"- `{slug}`: {counts[slug]} cases")
+    for slug in sorted(route_counts):
+        lines.append(f"- route `{slug}`: {route_counts[slug]} cases")
+    for category in sorted(category_counts):
+        lines.append(f"- category `{category}`: {category_counts[category]} cases")
     failed = [result for result in results if not result.passed]
+    failure_counts = Counter(result.failure_mode for result in failed)
     lines.extend(["", "## Results", ""])
     if not failed:
         lines.append("No failures.")
     else:
+        for mode, count in failure_counts.most_common():
+            lines.append(f"- `{mode}`: {count}")
+        lines.append("")
         for result in failed[:20]:
+            expected_route = result.expected_route or "NO_TRIGGER"
+            got = result.predicted_route if result.predicted_trigger else "NO_TRIGGER"
             lines.append(
-                f"- `{result.expected}` expected, got `{result.predicted or 'INVALID'}` for prompt: {result.prompt}"
+                f"- `{result.case_id}` expected `{expected_route}`, got `{got}` for prompt: {result.prompt}"
             )
     lines.append("")
     return "\n".join(lines)
@@ -255,49 +293,82 @@ def main() -> int:
 
     thresholds = json.loads(read_text(Path(args.thresholds_file)))
     min_accuracy = args.fail_below if args.fail_below is not None else float(thresholds["min_accuracy"])
-    cases = load_cases(Path(args.cases_file), args.max_cases)
+    all_cases = load_eval_cases(Path(args.cases_file))
+    cases = all_cases[: args.max_cases] if args.max_cases is not None else all_cases
     description, allowed_routes, route_context = build_routing_context(Path(args.router_file))
 
     results: list[JudgeResult] = []
-    counts = {slug: 0 for slug in allowed_routes}
+    route_counts = {slug: 0 for slug in allowed_routes}
+    category_counts: Counter[str] = Counter()
+    trigger_passes = 0
+    route_passes = 0
+    overall_passes = 0
+    routed_cases = [case for case in cases if case.should_trigger]
     for case in cases:
-        expected = str(case["expected"])
-        counts[expected] = counts.get(expected, 0) + 1
-        predicted, confidence, rationale, raw = judge_prompt(
+        category_counts[case.category] += 1
+        if case.expected_route:
+            route_counts[case.expected_route] = route_counts.get(case.expected_route, 0) + 1
+        predicted_trigger, predicted_route, confidence, rationale, raw = judge_prompt(
             config,
-            str(case["prompt"]),
+            case.prompt,
             description,
             allowed_routes,
             route_context,
         )
+        trigger_ok = predicted_trigger == case.should_trigger
+        route_ok = case.should_trigger and predicted_trigger and predicted_route == (case.expected_route or "")
+        passed = trigger_ok and (route_ok if case.should_trigger else True)
+        trigger_passes += int(trigger_ok)
+        if case.should_trigger:
+            route_passes += int(route_ok)
+        overall_passes += int(passed)
         results.append(
             JudgeResult(
-                prompt=str(case["prompt"]),
-                expected=expected,
-                predicted=predicted,
-                passed=predicted == expected,
+                case_id=case.case_id,
+                prompt=case.prompt,
+                category=case.category,
+                variation=case.variation,
+                expected_trigger=case.should_trigger,
+                expected_route=case.expected_route,
+                predicted_trigger=predicted_trigger,
+                predicted_route=predicted_route,
+                passed=passed,
                 confidence=confidence,
                 rationale=rationale,
                 raw_response=raw,
+                failure_mode=classify_failure_mode(case, predicted_trigger, predicted_route),
             )
         )
 
-    accuracy = sum(result.passed for result in results) / len(results) if results else 0.0
+    trigger_accuracy = trigger_passes / len(cases) if cases else 0.0
+    route_accuracy = route_passes / len(routed_cases) if routed_cases else 0.0
+    overall_accuracy = overall_passes / len(cases) if cases else 0.0
     report = {
         "provider": config.provider,
         "model": config.model,
         "base_url": config.base_url,
         "min_accuracy": min_accuracy,
-        "accuracy": accuracy,
-        "coverage": counts,
+        "overall_accuracy": overall_accuracy,
+        "trigger_accuracy": trigger_accuracy,
+        "route_accuracy": route_accuracy,
+        "coverage": {
+            "routes": route_counts,
+            "categories": dict(category_counts),
+        },
         "results": [
             {
+                "id": result.case_id,
                 "prompt": result.prompt,
-                "expected": result.expected,
-                "predicted": result.predicted,
+                "category": result.category,
+                "variation": result.variation,
+                "expected_trigger": result.expected_trigger,
+                "expected_route": result.expected_route,
+                "predicted_trigger": result.predicted_trigger,
+                "predicted_route": result.predicted_route,
                 "passed": result.passed,
                 "confidence": result.confidence,
                 "rationale": result.rationale,
+                "failure_mode": result.failure_mode,
                 "raw_response": result.raw_response,
             }
             for result in results
@@ -305,11 +376,20 @@ def main() -> int:
     }
     if args.markdown_out:
         Path(args.markdown_out).write_text(
-            render_markdown(config, min_accuracy, accuracy, counts, results),
+            render_markdown(
+                config,
+                min_accuracy,
+                overall_accuracy,
+                trigger_accuracy,
+                route_accuracy,
+                route_counts,
+                dict(category_counts),
+                results,
+            ),
             encoding="utf-8",
         )
     print(json.dumps(report, indent=2))
-    return 0 if accuracy >= min_accuracy else 2
+    return 0 if overall_accuracy >= min_accuracy else 2
 
 
 if __name__ == "__main__":

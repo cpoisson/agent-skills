@@ -62,23 +62,24 @@ This repository publishes assistant-portable skill content.
   Deterministic gate:
 
 ```bash
-./scripts/skill_critic.py --thresholds-file evals/skill_critic_thresholds.json --markdown-out EVALUATIONS.md
+python3 scripts/skill_critic.py --thresholds-file evals/skill_critic_thresholds.json --markdown-out EVALUATIONS.md
 ```
 
 - Semantic judge:
 
 ```bash
-./scripts/semantic_skill_judge.py --provider ollama --model qwen2.5:1.5b --thresholds-file evals/semantic_judge_thresholds.json --markdown-out /tmp/semantic-judge.md
+python3 scripts/semantic_skill_judge.py --provider ollama --model qwen2.5:1.5b --thresholds-file evals/semantic_judge_thresholds.json --markdown-out /tmp/semantic-judge.md
 ```
 
 - The quality gate currently checks:
-  - score thresholds for description, routing recall, portability, and total quality
+  - score thresholds for description, trigger-plus-routing quality, portability, and total quality
   - minimum eval-case coverage per routed sub-skill
   - load budget for the single-route path
   - load budget for the two-route path
 - The semantic judge is a second-layer check. It is useful for paraphrases and semantic drift, but the deterministic critic remains the hard baseline.
 - The default fast semantic backend is Ollama with `qwen2.5:1.5b` because it cleared the current threshold locally while running faster than the larger local alternatives tested.
-- Update `evals/skill_critic_cases.json` whenever a real-world prompt reveals a recall miss.
+- Prefer invoking the Python entrypoints with `python3 scripts/...` in docs and CI for portability across environments that mount the workspace `noexec`.
+- Update `evals/skill_critic_cases.json` whenever a real-world prompt reveals a recall miss, false trigger, or ambiguity the router handled poorly.
 - Update `evals/skill_critic_thresholds.json` only when intentionally changing the quality bar.
 - Keep `EVALUATIONS.md` refreshed when the critic behavior or thresholds change.
 
