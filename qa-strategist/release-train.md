@@ -7,7 +7,7 @@ Design a release process that builds confidence without creating unnecessary cer
 A release is not an event, it is a flow. Every change travels:
 
 ```
-feature branch → staging → manual validation → production
+feature branch → staging → optional manual validation → production
 ```
 
 The "release train" is the rhythm at which batches of changes are promoted from staging to production.

@@ -46,6 +46,16 @@ This repository publishes assistant-portable skill content.
 - When adding support for a new assistant, add an adapter file instead of forking the shared skill content.
 - Shared procedures should still read correctly if copied into another assistant ecosystem with no tool translation.
 
+## Contributing
+
+- Use short-lived topic branches and open PRs instead of pushing directly to `main`.
+- Branch names should be lowercase kebab-case after the prefix and follow the existing QA workflow conventions:
+  - `feat/<issue-id>-<short-description>` for regular feature work
+  - `fix/<issue-id>-<short-description>` for bug fixes and low-risk patches
+  - `hotfix/<issue-id>-<short-description>` for urgent production fixes
+- If there is no issue ID, use a short descriptive slug such as `fix/payment-rounding-error`.
+- Keep the detailed branching base and merge-target rules in `qa-strategist/release-train.md` and `qa-strategist/bug-fix.md`; this section only centralizes the naming convention for contributors.
+
 ## Evaluation And CI
 
 - Run the critic before merging changes that touch skill metadata, routing, or adapter files:

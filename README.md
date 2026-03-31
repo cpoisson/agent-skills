@@ -1,139 +1,154 @@
 # agent-skills
 
-> **Open-source agent skills** — composable, model-agnostic, designed for the agentic era.
->
-> Compatible with **GitHub Copilot** (VS Code) and **Claude** (via the `.agents/skills/` convention).
+> Installable QA skills for teams that want more confidence when shipping bug fixes and features.
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
----
+`qa-strategist` gives your coding agent the behavior of a strong QA analyst: clarify expected behavior, identify the highest-risk paths, and turn that into concrete tests, release checks, and safer rollout decisions.
 
-## Philosophy
+It is built for teams that do not just want advice. They want stronger evidence before shipping.
 
-When generating code becomes easier, the scarce thing is no longer code. **It is confidence.**
+## Who This Is For
 
-Quality scaffolding and good QA practices matter more than ever in the agentic era — not less. Every change an agent makes needs a clear definition of done. Every feature shipped needs behavioral assertions that prove it works. Tests are not bureaucracy; they are unambiguous contracts that agents and humans both can verify.
+- Teams shipping bug fixes or features without enough QA confidence
+- Developers who want clear, actionable guidance instead of generic testing advice
+- Projects that need a portable skill they can install quickly and use across agents
 
-This repo packages that expertise as installable agent skills and ready-to-use agent templates.
+## What Confidence Looks Like
 
----
+When you use `qa-strategist`, you should expect it to:
+
+- ask a few targeted questions before recommending a large plan
+- focus on the user flows most likely to break or hurt
+- turn expected behavior into concrete tests, checks, and rollout safeguards
+- push bug-fix work toward reproduction, a failing test, a minimal fix, and verification
+- give a clear go/no-go view when you ask about feature or release readiness
+
+## Why Tests Matter Here
+
+This skill treats tests as the strongest confidence signal available when shipping software:
+
+- tests make expected behavior explicit
+- tests turn bug fixes into verified regressions that stay fixed
+- tests give coding agents and humans the same definition of done
+- tests reduce "it looks fine" decisions before release
+
+## Quick Install
+
+Fastest path:
+
+```bash
+npx skills add cpoisson/agent-skills
+```
+
+If you do not want to use the installer, copy [`qa-strategist/`](qa-strategist/) into `.agents/skills/qa-strategist/`.
+
+## Start Using It
+
+Example prompts:
+
+- `Assess the main QA risks in this repo`
+- `What should we test before shipping this bug fix?`
+- `Help me reproduce this bug and write the first failing test`
+- `Turn this acceptance criteria into a test plan`
+- `Can we start this feature, or are we missing too much?`
+- `What are the biggest release risks right now?`
 
 ## Skill Catalog
 
 | Skill | Description |
 |-------|-------------|
-| [`qa-strategist`](qa-strategist/) | Comprehensive QA strategy: risk analysis, test pyramid, E2E design, environments, release safety, observability, and more. Designed for the agentic era. |
+| [`qa-strategist`](qa-strategist/) | QA strategy and shipping confidence for bug fixes and features: risk analysis, test planning, stronger regression coverage, release readiness, observability, rollback, and roadmap hygiene. |
 
-More skills coming.
+## What Is Included
 
----
+| Sub-skill | Outcome |
+|-----------|---------|
+| [risk-analysis.md](qa-strategist/risk-analysis.md) | Find the highest-confidence QA work first |
+| [test-pyramid.md](qa-strategist/test-pyramid.md) | Build or audit the right unit, integration, and E2E mix |
+| [e2e-test-design.md](qa-strategist/e2e-test-design.md) | Identify critical user flows and turn them into test coverage |
+| [spec-writing.md](qa-strategist/spec-writing.md) | Clarify expected behavior and acceptance criteria |
+| [agentic-coding-qa.md](qa-strategist/agentic-coding-qa.md) | Verify AI-generated changes with real evidence |
+| [test-environments.md](qa-strategist/test-environments.md) | Improve environment parity and test-data safety |
+| [prod-dev-isolation.md](qa-strategist/prod-dev-isolation.md) | Reduce blast radius with safer release controls |
+| [hotfix-rollback.md](qa-strategist/hotfix-rollback.md) | Respond to incidents with a controlled rollback path |
+| [release-train.md](qa-strategist/release-train.md) | Run a release with explicit readiness checks |
+| [observability.md](qa-strategist/observability.md) | Add the signals needed to trust production behavior |
+| [data-safety.md](qa-strategist/data-safety.md) | Protect migrations, restores, and data integrity |
+| [bug-fix.md](qa-strategist/bug-fix.md) | Drive a bug fix from reproduction to verified completion |
+| [program-management.md](qa-strategist/program-management.md) | Keep roadmap, priorities, and feature starts quality-aware |
 
-## Install a Skill
+## Evaluation Metrics
 
-Skills install into your project's `.agents/skills/` directory and are tracked in `skills-lock.json`.
+This repository keeps the skill measurable with a deterministic critic and a semantic routing judge.
 
-Run the install command for the skill you want, or manually add the entry to `skills-lock.json`:
+- Deterministic quality gate:
+  - total quality score at least `90`
+  - routing score at least `90`
+  - portability score at least `90`
+  - description score at least `85`
+  - at least `2` eval cases per routed sub-skill
+  - single-route load budget at most `2400` words
+  - two-route load budget at most `3600` words
+- Semantic routing gate:
+  - minimum routing accuracy `0.85`
 
-```json
-{
-  "version": 1,
-  "skills": {
-    "qa-strategist": {
-      "source": "cpoisson/agent-skills",
-      "sourceType": "github"
-    }
-  }
-}
-```
-
-Once installed, the skill is automatically available to all agents in your workspace (Copilot, Claude, or any agent that reads `.agents/skills/`).
-
----
-
-## Use the QA Strategist Agent
-
-The `agents/` directory contains ready-to-use agent definition templates. These are not auto-installed — copy the file into your own project.
-
-**Setup:**
+Run the checks with:
 
 ```bash
-# 1. Copy the agent template into your project
-cp agents/qa-strategist.agent.md /your-project/.github/agents/qa-strategist.agent.md
-
-# 2. Make sure the qa-strategist skill is installed (see above)
+./scripts/skill_critic.py --thresholds-file evals/skill_critic_thresholds.json --markdown-out EVALUATIONS.md
+./scripts/semantic_skill_judge.py --provider ollama --model qwen2.5:1.5b --thresholds-file evals/semantic_judge_thresholds.json --markdown-out /tmp/semantic-judge.md
 ```
 
-Then invoke from your agent chat (Copilot, Claude, or equivalent):
+The latest deterministic report is published in [EVALUATIONS.md](EVALUATIONS.md).
 
-> `@qa-strategist assess my current QA coverage`
+## Agent And Skill Model
 
-> `@qa-strategist help me design E2E tests for the auth flow`
+The shared skill files are portable and procedure-focused. The optional agent files add a stronger persona and working style on top.
 
-> `@qa-strategist what are my biggest quality risks right now?`
-
-The agent starts by asking questions to understand your project's current state before prescribing anything.
-
----
-
-## What's In Each Skill
-
-### `qa-strategist`
-
-| Sub-skill | Domain |
-|-----------|--------|
-| [risk-analysis.md](qa-strategist/risk-analysis.md) | Interactive risk matrix, severity × likelihood, maps risks → QA actions |
-| [test-pyramid.md](qa-strategist/test-pyramid.md) | Test pyramid layers, bootstrapping strategy, anti-patterns, CI integration |
-| [e2e-test-design.md](qa-strategist/e2e-test-design.md) | User flow inventory, critical path selection, coverage matrix, acceptance criteria |
-| [spec-writing.md](qa-strategist/spec-writing.md) | Living specs with YAML frontmatter, gap analysis, ambiguity detection |
-| [agentic-coding-qa.md](qa-strategist/agentic-coding-qa.md) | Definition of done for AI-generated code, test-as-contract, agent self-verification |
-| [test-environments.md](qa-strategist/test-environments.md) | Local / Staging / Prod topology, parity checklist, seed data strategy |
-| [prod-dev-isolation.md](qa-strategist/prod-dev-isolation.md) | Deploy gates, feature flags, migration safety, confidence checklist |
-| [hotfix-rollback.md](qa-strategist/hotfix-rollback.md) | Emergency playbook, rollback procedures, post-mortem template |
-| [release-train.md](qa-strategist/release-train.md) | Release cadence, changelog discipline, readiness checklist |
-| [observability.md](qa-strategist/observability.md) | Structured logging, error tracking, health checks, uptime monitoring |
-| [data-safety.md](qa-strategist/data-safety.md) | Backup strategy, restore drills, migration safety, data integrity |
-| [program-management.md](qa-strategist/program-management.md) | Roadmap hygiene, progress tracking, prioritization, urgent bug triage, feature start go/no-go |
-
----
-
-## Agent + Skills Architecture
-
-```
-                ┌──────────────────────────────┐
-                │   qa-strategist.agent.md      │  ← copy to .github/agents/
-                │   (orchestrator + persona)    │
-                └──────────────┬───────────────┘
-                               │ routes to
-                ┌──────────────▼───────────────┐
-                │   qa-strategist/SKILL.md      │  ← installed skill (router)
-                └──────────────┬───────────────┘
-                               │ loads
-          ┌────────────────────┼────────────────────┐
-          │                    │                    │
-    risk-analysis.md    test-pyramid.md    e2e-test-design.md
-    spec-writing.md     agentic-coding-qa.md        ...
-```
-
-The **agent** is opinionated: it has a philosophy, a point of view, and a preferred way of working. It asks questions before prescribing, pushes back when needed, and adapts its output format to the task.
-
-The **skills** are neutral: they are procedure-oriented reference documents — routing tables, checklists, decision trees, and playbooks. No personality, no framing. They load cleanly into any agent, including ones with a different persona.
-
-You can use the skills without the agent, or wire the agent to your own persona.
-
----
+- Use the skill alone when you want lightweight routing and reusable QA workflows
+- Use the agent template when you want a more opinionated QA strategist persona
 
 ## Contributing
 
-Contributions welcome. Each skill should:
-- Address a single, well-defined QA domain
-- Stay under 500 lines
-- Be platform-agnostic (no tool-specific assumptions)
-- Include concrete templates, checklists, or decision trees — not just prose
+Each skill should:
 
-Open an issue to propose a new skill before building it.
+- address one clear QA domain
+- stay assistant-neutral
+- include templates, checklists, decision trees, or test-oriented artifacts
+- stay concise enough to load cheaply
 
----
+Open an issue before adding a new skill.
+
+## Agent-Specific Notes
+
+<details>
+<summary>Codex</summary>
+
+- Install the shared skill into `.agents/skills/qa-strategist/`
+- Codex-specific repository guidance belongs in your project-level `AGENTS.md`
+- Use the shared skill for routing and keep Codex behavior hints in the adapter layer
+
+</details>
+
+<details>
+<summary>Claude</summary>
+
+- Install the shared skill into `.agents/skills/qa-strategist/`
+- If you want a Claude-specific agent entrypoint, copy [`.claude/agents/qa-strategist.md`](.claude/agents/qa-strategist.md) into your project
+- Start with direct prompts such as `what should we test before shipping this fix?`
+
+</details>
+
+<details>
+<summary>GitHub Copilot</summary>
+
+- Install the shared skill into `.agents/skills/qa-strategist/`
+- Add repo-level Copilot guidance with [`.github/copilot-instructions.md`](.github/copilot-instructions.md) if you want this repo's adapter behavior
+- If you want a stronger persona, also copy [`agents/qa-strategist.agent.md`](agents/qa-strategist.agent.md) into your project
+
+</details>
 
 ## License
 
-[CC BY 4.0](LICENSE) — free to use, share, and adapt with attribution.
+[CC BY 4.0](LICENSE) - free to use, share, and adapt with attribution.
