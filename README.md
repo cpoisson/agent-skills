@@ -160,11 +160,12 @@ Open an issue before adding a new skill.
 
 This project sits in the same emerging space as recent work on agent reliability, skill evaluation, and agentic QA:
 
-- [SkillsBench: Benchmarking Agent Skills](https://arxiv.org/abs/2602.12670) - shows that curated skills can materially improve agent performance, but gains vary by domain and model
-- [Towards a Science of AI Agent Reliability](https://arxiv.org/abs/2602.16666) - argues that accuracy alone is not enough and frames reliability in terms of consistency, robustness, predictability, and safety
-- [Upskill: Generate and Evaluate Agent Skills](https://huggingface.co/blog/upskill) - focuses on generating skills from traces and evaluating them for both quality and token efficiency
-- [How to Evaluate and Test Agent Skills](https://www.youtube.com/watch?v=XUzUf_HCgvk) - practical walkthrough of skill eval design, including trigger tests, rubrics, and judge-based automation
-- [Agentic Evaluations Workshop](https://www.youtube.com/watch?v=UxMZfbWI3LY) - broad survey of current issues in agent evals, including transparency, environment-based testing, robustness, and governance
+- [SkillsBench: Benchmarking Agent Skills](https://arxiv.org/abs/2602.12670): Benchmarks whether curated and self-generated skills actually help agent performance across domains, models, and task types.
+- [Towards a Science of AI Agent Reliability](https://arxiv.org/abs/2602.16666): Proposes reliability as a separate evaluation axis from raw accuracy, organized around consistency, robustness, predictability, and safety.
+- [Spec-Driven Development: From Code to Contract in the Age of AI Coding Assistants](https://arxiv.org/abs/2602.00180): Argues that AI-assisted software work should begin from explicit contracts, specs, and acceptance criteria rather than informal intent alone.
+- [Upskill: Generate and Evaluate Agent Skills](https://huggingface.co/blog/upskill): Describes generating skills from agent traces and evaluating them for both task quality and token efficiency.
+- [How to Evaluate and Test Agent Skills](https://www.youtube.com/watch?v=XUzUf_HCgvk): Walks through a practical skill-eval loop built around trigger tests, rubrics, and judge-based automation.
+- [Agentic Evaluations Workshop](https://www.youtube.com/watch?v=UxMZfbWI3LY): Surveys broader agent-eval concerns including transparency, environment-based testing, robustness, and governance.
 
 ## License
 

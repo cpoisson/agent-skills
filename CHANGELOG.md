@@ -38,3 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stopped ignoring `ROADMAP.md` so repository planning and skill-priority decisions can be versioned with the rest of the QA process
 - Switched docs and CI examples to `python3 scripts/...` invocation for better portability across environments that do not allow direct script execution
 - Added a short related-work section to `README.md` linking the most relevant recent papers and talks on skill benchmarking, agent reliability, and agentic evaluation
+- Added the spec-driven development paper to `README.md` related work to better ground the repo's emphasis on acceptance criteria and testable contracts
+- Rewrote the `README.md` related-work descriptions around the concrete takeaway each reference offers for this repo
+- Simplified `README.md` related work into short abstract-style paper summaries focused on the most relevant research references
