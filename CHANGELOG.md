@@ -29,4 +29,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expanded `qa-strategist` trigger metadata to better match GitHub issue fixes, ticket-driven bug work, bootstrap-testing prompts, and issue-prioritization requests
 - Removed assistant-specific tool names from `qa-strategist/bug-fix.md` so the shared skill content stays portable across assistants
 - Reworked `README.md` to position `qa-strategist` as a QA-confidence skill for bug fixes and feature shipping, switched the quick install to `npx skills add cpoisson/agent-skills`, advertised tests more explicitly, and added collapsible agent-specific setup notes
+- Added explicit evaluation metrics and quality-gate thresholds to `README.md`, including the deterministic critic, semantic routing accuracy target, and commands to run both checks
 - Rebalanced `ROADMAP.md` toward first-run adoption, expected-behavior clarity, and confidence-oriented documentation
