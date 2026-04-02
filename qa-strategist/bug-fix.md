@@ -26,25 +26,7 @@ git push -u origin fix/<issue-id>-<short-description>
 
 ---
 
-## Step 2 — Put the Issue In Progress
-
-Move the issue to **In Progress** in the project tracker before writing any code.
-
-Using the GitHub CLI:
-
-```bash
-# If using GitHub Issues + Projects
-gh issue edit <issue-number> --add-label "in-progress"
-
-# If the project board supports status fields via gh api, update the status field
-# (see project-specific tooling for GitKraken / Linear / Jira equivalents)
-```
-
-> This signals ownership and prevents duplicate work.
-
----
-
-## Step 3 — Write a Failing Test for the Bug
+## Step 2 — Write a Failing Test for the Bug
 
 Write a test that **reproduces the bug and currently fails**. This is non-negotiable: if you cannot write a failing test, the bug is not yet understood.
 
@@ -87,7 +69,7 @@ bun test --filter "<test description>"     # or: npm test, pytest -k, etc.
 
 ---
 
-## Step 4 — Plan the Fix
+## Step 3 — Plan the Fix
 
 Before editing production code, write a short fix plan (a few bullet points is enough):
 
@@ -98,11 +80,11 @@ Before editing production code, write a short fix plan (a few bullet points is e
 
 > If the root cause is not clear from reading the code, inspect the relevant files and trace the data flow before planning. Do not guess.
 
-Document the plan as a comment in the PR description (written in Step 6) — it becomes the review narrative.
+Document the plan as a comment in the PR description (written in Step 5) — it becomes the review narrative.
 
 ---
 
-## Step 5 — Implement & Verify the Tests Pass
+## Step 4 — Implement & Verify the Tests Pass
 
 Apply the planned fix with minimal scope. Then run the full test suite:
 
@@ -124,7 +106,7 @@ If any previously passing test now fails, the fix has introduced a regression. R
 
 ---
 
-## Step 6 — Create a Pull Request
+## Step 5 — Create a Pull Request
 
 Open a PR targeting the integration branch. The description must include:
 
@@ -148,7 +130,7 @@ Closes #<issue-number>
 
 ---
 
-## Step 7 — Assess CI
+## Step 6 — Assess CI
 
 After the PR is open, **wait for CI to complete** and verify every check is green.
 
@@ -173,7 +155,6 @@ gh pr checks <pr-number> --watch
 The bug fix is complete when:
 
 - [ ] Branch exists and is pushed
-- [ ] Issue is marked In Progress (and will auto-close when PR merges)
 - [ ] A test reproducing the bug exists and was red before the fix
 - [ ] All tests pass locally after the fix
 - [ ] PR is open with a clear description and linked issue

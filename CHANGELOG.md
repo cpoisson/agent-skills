@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Removed the project-tracker status update requirement from `qa-strategist/bug-fix.md` so the bug-fix workflow no longer tells users to mark tickets In Progress
 - Expanded `AGENTS.md` into a project-specific coding-agent playbook covering authoring rules, portability rules, evaluation procedure, load-budget guidance, and definition of done
 - Added a self-hosting rule so repository process changes are expected to use `qa-strategist` guidance on the repository itself
 - Centralized the repository branch naming convention in `AGENTS.md`, reusing the existing `feat/*`, `fix/*`, and `hotfix/*` patterns already defined in the QA workflow docs
